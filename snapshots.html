@@ -1,0 +1,98 @@
+---
+layout: mathjax
+title: Snapshots | D Ghosh
+header: Snapshots of shared memory
+---
+
+<p>
+We have an \( n \)-length array \( \texttt{A} \) where each \( \texttt{A[i]} \) is updated by a different writer \( \texttt{W[i]} \).
+There is also a reader \( \texttt{R} \) who reads \( \texttt{A} \) from left to right and whose task is to return a snapshot reflecting the contents of \( \texttt{A} \) at some time. 
+</p>
+
+<p>
+The task is not straightforward.
+Due to the ever-changing nature of \( \texttt{A} \), simply reading it sequentially might return a snapshot that \( \texttt{A} \) was never equal to!
+<!--Problem: while \( \texttt{R} \) reads \( \texttt{A} \), \( \texttt{W[i]} \) changes \( \texttt{A[i]} \) after \( \texttt{R} \) has passed it and \( \texttt{W[j]} \) changes \( \texttt{A[j]} \) which \( \texttt{R} \) hasn't reached yet.
+    \( \texttt{R} \) returns an array that never existed.-->
+
+<img src="assets/images/snapshots_basic_issue.jpg" alt="Me" width=98%>
+</p>
+
+<p>
+The reader and writers need to work together to avoid this issue.
+It will be assumed that
+<ol type="A">
+    <li> the read of a single cell and a write to that cell do not overlap (think of them as atomic operations), </li>
+    <li> \( \texttt{R} \) should not return an 'old' valid snapshot, i.e. in the order \( \texttt{A=V1} \rightarrow \texttt{A=V2} \rightarrow \texttt{R's read} \) (with none of the events overlapping), \( \texttt{R} \) should not return \( \texttt{V1} \) as its snapshot.</li>
+</ol>
+</p>
+
+<hr>
+
+<h3>Solution #1</h3>
+
+<p>
+In addition to writing a value to its cell, the writer also includes the timestamp.
+</p>
+<p>
+The reader keeps reading the array in an indefinite loop (call each iteration a \( \texttt{collect} \) ), <i>until two consecutive \( \texttt{collects} \) return the same snapshot</i>.
+This snapshot is valid since it must have existed at any point in the time gap between the two \( \texttt{collect} \)s (timestamping the values is crucial in ensuring this).
+</p>
+
+<p>
+<img src="assets/images/snapshots_naive.jpg" alt="Me" width=95%>
+</p>
+
+<p>
+The issue here is that \( \texttt{R} \) might keep on iterating this loop forever because the \( \texttt{collect} \)s could always keep changing.
+</p>
+
+<hr>
+
+<h3>Solution #2</h3>
+
+<p>
+In #1, the writers were causing the trouble and did not bother to do anything about it.
+They will have to 'help' \( \texttt{R} \) by <i>taking a valid snapshot of \( \texttt{A} \) before writing</i> (so a write is now a read followed by the update), and if \( \texttt{R} \) is stuck on the loop for too long, it uses those snapshots. <!-- Does it though? How would it read the snapshots, if the writer took one? -->
+At this point some things are not clear:
+<ol type="I">
+    <li> how the writers manage to always take a valid snapshot, and </li>
+    <li> how and when \( \texttt{R} \) chooses among these snapshots so as to not violate B. </li>
+</ol>
+</p>
+
+<p>
+The solution is a recursive one.
+A read \( \texttt{r} \) operates as follows (note that writers and \( \texttt{R} \) both implement reads now):
+<ul>
+    <li> Keep repeating \( \texttt{collect} \) as before.
+        If two consecutive \( \texttt{collect} \)s are the same, use that \( \texttt{collect} \) as it is a valid snapshot.
+        If this does not happen, eventually there must be some writer \( \texttt{W} \) who has <i>changed(/updated) the array twice</i> (PHP). </li>
+    <li> This means \( \texttt{W} \) must have executed an entire write (starting after its first update) <i>within</i> the interval in which read \( \texttt{r} \) was executed. </li>
+    <li> This is the cue for recursion, since \( \texttt{W} \)'s write has a read embedded in it.
+        End the definition of \( \texttt{r} \) by requiring that <i>IF</i> \( \texttt{W} \)'s (embedded) read had returned a snapshot to \( \texttt{W} \), then \( \texttt{r} \) should use that snapshot, otherwise it returns nothing.</li>
+</ul>
+</p>
+
+<p>
+In fact, \( \texttt{W} \)'s embedded read <i>SHOULD</i> have returned a snapshot and moreover the snapshot is valid (meaning \( \texttt{r} \) always returns a valid snapshot).
+To see this, look at \( \texttt{W} \)'s embedded read - either it must have had two consecutive \( \texttt{collect} \)s in which case we do have a valid snapshot, or there must be a writer \( \texttt{W'} \) whose write interval falls within \( \texttt{W} \)'s embedded read interval.
+Clearly \( \texttt{W'} \neq \texttt{W} \).
+Apply the same reasoning to \( \texttt{W'} \).
+How long can this go on recursively? There are at most \( n \) writers.
+Down the line, we will run out of writers and there will be some super-embedded read which finds two consecutive equal \( \texttt{collect} \)s and thus has a valid snapshot.
+This snapshot gets carried up the recursion chain and is returned by \( \texttt{r} \).
+</p>
+
+<!-- give illustration for the write structure -->
+<p>
+<i>Illustrations for #2 coming up.</i>
+</p>
+
+<hr>
+
+<h3>References</h3>
+
+<ul>
+    <li><i>The Art of Multiprocessor Programming</i>, by Maurice Herlihy and Nir Shavit.</li>
+</ul>

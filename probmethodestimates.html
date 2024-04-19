@@ -1,0 +1,89 @@
+---
+layout: mathjax
+title: Approximations | D Ghosh
+header: Estimates used by the Probabilistic Method
+---
+Solving problems using the Probabilistic Method involves using various estimates.
+I have included some of them (mainly for self-reference) and their proofs.
+
+
+<p>
+<b>Result 1. </b>
+\[ \binom{n}{k} \le \frac{n^k}{k!}. \]
+</p>
+<details>
+    <summary>Proof</summary>
+    <p>
+    Follows from the formula for \( \binom{n}{k} \).
+    </p>
+</details>
+<p>
+
+<b>Result 2. </b>
+\[ \left( \frac{n}{k} \right)^k \le \binom{n}{k} \le \left( \frac{en}{k} \right)^k. \]
+</p>
+<details>
+    <summary>Proof</summary>
+    <p>
+    The first inequality is equivalent to
+    \[ \left( 1 - \frac{1}{k} \right) \cdots \left( 1 - \frac{k - 1}{k} \right) \le \left( 1 - \frac{1}{n} \right) \cdots \left( 1 - \frac{k - 1}{n} \right). \]
+    To get the second inequality, use Result 1 and \[ e^k = \sum_{i = 0}^{\infty} \frac{k^i}{i!} \ge \frac{k^k}{k!} \Rightarrow \frac{1}{k!} \le \left( \frac{e}{k} \right)^k.\]
+    </p>
+</details>
+
+<p>
+<b>Result 3. </b>
+\[ \left( \frac{n}{e} \right)^n \le n! \le en\left( \frac{n}{e} \right)^n. \]
+</p>
+<details>
+    <summary>Proof</summary>
+    <p>
+    The first inequality was proved in Result 2.
+    For the second inequality, consider
+    \[ \sum_{i = 1}^{n - 1} \ln i \le \int_1^n \ln x \,dx. \]
+    </p>
+</details>
+
+<p>
+<b>Result 4. </b>
+<i>For all real \(x\),</i>
+\[ 1 + x \le e^x. \]
+</p>
+<details>
+    <summary>Proof</summary>
+    <p>
+    Straightforward for \( x \le -1 \) and \( x \ge 0 \).
+    Letting \( x = -t \) where \( 0 \lt t \lt 1 \), we need to prove \( 1 - t \le e^{-t} \).
+    Now
+    \[ e^t = 1 + t + \frac{t^2}{2!} + \cdots \lt 1 + t + t^2 + \cdots = \frac{1}{1 - t}, \]
+    from which our claim follows.
+    </p>
+</details>
+
+<p>
+<b>Corollary 4.1. </b>
+\[ (1 - p)^m \le e^{-mp}. \]
+</p>
+
+<p>
+<b>Corollary 4.2. </b>
+<i>For \( 0 \le p \le \frac{1}{2} \),</i>
+\[ 1 - p \ge e^{-2p}. \]
+<details>
+    <summary>Proof</summary>
+    <p>
+    Follows from 
+    \[ 1 - p \ge \frac{1}{1 + 2p} \ge e^{-2p}. \]
+    </p>
+</details>
+
+<p>
+<b>Result 5. </b>
+I don't have a proof of this:
+\[ \frac{2^{2m}}{2\sqrt{m}} \le \binom{2m}{m} \le \frac{2^{2m}}{\sqrt{2m}}. \]
+<br>
+
+<p>
+<h3> References: </h3>
+<ol>
+    <li><a href="https://www.cs.cmu.edu/~15850/handouts/matousek-vondrak-prob-ln.pdf">https://www.cs.cmu.edu/~15850/handouts/matousek-vondrak-prob-ln.pdf</a>

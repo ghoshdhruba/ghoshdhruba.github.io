@@ -1,0 +1,33 @@
+---
+layout: default
+title: PDF bookmarks | D Ghosh
+header: Creating bookmarks in PDFs
+---
+Nobody likes having PDFs with no bookmarks (or an index as you might call it), but that won't be a problem any more!
+All we need is the <code>pdftk</code> utility (it has a ton of other uses as well).
+</p>
+
+<p>
+Suppose the PDF we're working with is called <code>foo.pdf</code>.
+Enter the following line in a terminal
+<pre><code>
+pdftk foo.pdf dump_data output bookmark.txt
+            </pre></code>
+            This will create a file called <code>bookmark.txt</code> containing various data about <code>foo.pdf</code>.
+            Now open <code>bookmark.txt</code> using your favorite editor, and insert the following piece of code at the top (or bottom):
+            <pre><code>
+BookmarkBegin
+BookmarkTitle: Page Cover
+BookmarkLevel: 1
+BookmarkPageNumber: 1
+        </pre></code>
+        Exit the editor and enter
+        <pre><code>
+pdftk foo.pdf update_info bookmark.txt output bookmarked.pdf
+    </pre></code>
+    If we open <code>bookmarked.pdf</code>, we'll see the contents of <code>foo.pdf</code> but this time there's a bookmark section with the entry "Page Cover" pointing to page 1.
+    You can continue to add more bookmarks as you deem necessary.
+
+    <p>
+    <i>Note:</i> As far as I know, there's also a GUI version of <code>pdftk</code>, but I've never tried it out.
+    </p>

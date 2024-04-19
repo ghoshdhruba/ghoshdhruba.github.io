@@ -1,0 +1,26 @@
+---
+layout: mathjax
+title: Dijkstra | D Ghosh
+header: Motivating Dijkstra's algorithm
+---
+<p>
+We motivate the algorithm using time instead of distance.
+</p>
+
+<p>
+Imagine a virus starting at \( s \) at time \( 0 \), which spreads along any edge at the rate of \( 1 \) unit per second. 
+When the virus infects a node \( u \), it tries to calculate the earliest time at which each neighbor \( v \) of \( u \) will be infected, by adding the weight of edge \( (u, v) \) to the time when \( u \) was infected. 
+It will only update \(v\)'s time if it sees that its estimate is lower than the previous estimate (if any) for \( v \). 
+This corresponds to our intuition for how time values should be assigned to nodes.
+</p>
+
+<p>
+Suppose at some point of time that the nodes in set \( A \) are already infected. Each edge from \( A \) to \( V \setminus A \) is now being traversed by the virus. 
+Say the node with the smallest estimated time in \( V \setminus A \) is \( u \).
+None of the other estimated times in \( V \setminus A \) can be updated before \( u \) is reached, meaning \( u \) will be infected first
+(this motivates Dijkstra's algorithm). 
+</p>
+
+<p>
+If some node \( u \) is infected for the first time at time \( d \), this means that the shortest route from \( s \) to \( u \) has length \( d \), otherwise the virus would've reached \( u \) sooner.
+</p>

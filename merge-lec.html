@@ -1,0 +1,105 @@
+---
+layout: default
+title: Merging lecture notes | D Ghosh
+header: Merging lecture notes
+---
+<p>
+A friend of mine often wants to have lecture notes from various courses merged into a single PDF.
+The most recent was from this <a href="https://math.mit.edu/classes/18.783/2022/lectures.html">course page on elliptic curves</a>.
+</p>
+
+<p>
+To download the relevant files, create an empty directory and enter
+<pre><code>
+wget -r -np -nd -A "*Slides*" https://math.mit.edu/classes/18.783/2022/lectures.html
+            </pre></code>
+            (Note: I'm depending on the slide files to be named <code>...LectureSlides...</code> else the regular expression <code>*Slides*</code> won't match)
+</p>
+
+<p>
+For the interested, <code>-r</code> is <code>--recursive</code>, <code>-np</code> is <code>--no-parent</code>, <code>-nd</code> is <code>--no-directories</code> and <code>-A</code> is <code>--accept</code>.
+
+<p>
+We can't immediately use <code>pdftk</code> to merge the obtained files, because they won't be merged in the correct order.
+To take care of this, do
+<pre><code>
+find . -name "*.pdf" | sort -V >> sorted.txt
+            </pre></code>
+
+            (Without the <code>-V</code> option in <code>sort</code>, <code>filename_10.pdf</code> will be placed before <code>filename_1.pdf</code>).
+</p>
+
+<p>
+The contents of <code>sorted.txt</code> are thus
+<pre><code>
+$ cat sorted.txt
+./LectureSlides1.pdf
+./LectureSlides4.pdf
+./LectureSlides5.pdf
+./LectureSlides6.pdf
+  ...
+./LectureSlides24.pdf
+./LectureSlides25.pdf
+            </pre></code>
+</p>
+
+<p>
+To get the final PDF, do
+<pre><code>
+pdftk $(cat sorted.txt) cat output slides.pdf
+            </pre></code>
+</p>
+
+<h2 style="text-align:left"> For fun, </h2>
+<p>
+I tried adding <a href="bookmarkpdf.html">bookmarks</a> to this PDF.
+One can use <code>sed</code> to get the PDF names and <code>pdftk</code> to get the corresponding number of pages.
+</p>
+
+<p>
+First do
+<pre><code>
+pdftk slides.pdf dump_data output bookmark.txt
+            </pre></code>
+            and then create a Bash script (alternatively enter the lines except for the first in your terminal).
+            Let's call it <code>bookmark.sh</code>.
+            <pre><code>
+#!/bin/bash
+
+count=1
+for f in $(cat sorted.txt)
+do
+    TITLE=$(echo $f | sed 's/\.pdf//' | tail -c +3)
+    PAGES=$(pdftk $f dump_data | grep NumberOfPages | awk '{print $2}')
+    echo "BookmarkBegin" >> bookmark.txt
+    echo "BookmarkTitle: $TITLE" >> bookmark.txt
+    echo "BookmarkLevel: 1" >> bookmark.txt
+    echo "BookmarkPageNumber: $count" >> bookmark.txt
+    count=$(( $count + $PAGES ))
+done
+        </pre></code>
+        After making the script executable (<code>chmod +x bookmark.sh</code>), run it (<code>./bookmark.sh</code>).
+        The <code>bookmark.txt</code> file now looks like
+        <pre><code>
+...
+BookmarkBegin
+BookmarkTitle: LectureSlides1
+BookmarkLevel: 1
+BookmarkPageNumber: 1
+BookmarkBegin
+BookmarkTitle: LectureSlides4
+BookmarkLevel: 1
+BookmarkPageNumber: 45
+BookmarkBegin
+BookmarkTitle: LectureSlides5
+BookmarkLevel: 1
+BookmarkPageNumber: 59
+...
+    </pre></code>
+</p>
+<p>
+To incorporate this into <code>slides.pdf</code>, do
+<pre><code>
+pdftk slides.pdf update_info bookmark.txt output slides_bookmarked.pdf
+        </pre></code>
+</p>
