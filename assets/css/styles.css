@@ -122,3 +122,9 @@ details > p {
     border-radius: 4px;
     padding: 10px 10px 10px 10px;
 }
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
