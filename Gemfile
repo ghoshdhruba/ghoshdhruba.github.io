@@ -35,3 +35,8 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 gem "json", "2.7.2"
 
 gem "webrick", "~> 1.8"
+
+
+gem "nokogiri", "~> 1.18.8"
+
+gem "csv", "~> 3.3"

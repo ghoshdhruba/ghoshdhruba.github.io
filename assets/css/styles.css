@@ -128,3 +128,37 @@ details > p {
     margin-left: auto;
     margin-right: auto;
 }
+
+#nav-bg {
+    margin: 0;
+    padding: 3px 3px;
+    /*background: grey;
+    border-bottom: 3px solid #146f65;
+    color: #fff;*/
+}
+
+#top-nav {
+    margin: auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+#top-nav .top-nav-right {
+    padding-right: 5px;
+    float: right;
+}
+
+#top-nav a {
+    padding-left: 15px;
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 18px;
+    color: black;
+}
+
+#top-nav a:hover {
+    color: #f1f1f1;
+}
+
+#top-nav .current {
+    font-weight: bold;
+}

@@ -1,0 +1,12 @@
+<div id="nav-bg">
+    <div id="top-nav">
+      	{% for item in site.data.navigation %}
+    		<a href="{{ item.link }}" {% if page.url == item.link %}class="current"{% endif %}>{{ item.name }}</a>
+      	{% endfor %}
+        <div class="top-nav-right">
+            {% for item in site.data.social %}
+                <a href="{{ item.link }}" target="_blank"><i class="fa {{ item.fa-icon }}"></i></a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
