@@ -32,6 +32,7 @@
 title: Dhrubajyoti Ghosh
 domain: ghoshdhruba.github.io
 repository: ghoshdhruba/ghoshdhruba.github.io
+baseurl: ""
 url: https://ghoshdhruba.github.io
 
 # Build settings

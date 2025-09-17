@@ -1,0 +1,31 @@
+---
+layout: default
+title: Dhrubajyoti Ghosh
+permalink: /blog.html
+---
+<h3> Computer Science </h3>
+
+<ul>
+{%- for cs_page in site.data.cs-posts %}
+<li>
+    <a href="blog/{{ cs_page.link }}"> {{ cs_page.title }} | {{ cs_page.date }} </a>
+</li>
+{%- endfor %}
+</ul>
+
+<h3> Unix </h3>
+
+<ul>
+{%- for unix_page in site.data.unix-posts %}
+<li>
+    <a href="blog/{{ unix_page.link }}"> {{ unix_page.title }} | {{ unix_page.date }} </a>
+</li>
+{%- endfor %}
+</ul>
+
+<footer>
+    <script>
+        var x = new Date(document.lastModified);
+        document.writeln("Last modified: ", x.toDateString());
+    </script>
+</footer>
