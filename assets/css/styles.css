@@ -150,9 +150,11 @@ details > p {
 
 #top-nav a {
     padding-left: 15px;
-    font-family: 'Ubuntu Mono', monospace;
+    /*font-family: 'Ubuntu Mono', monospace;*/
+    font-family: 'Roboto';
     font-size: 18px;
     color: black;
+    font-variant: small-caps;
 }
 
 #top-nav a:hover {
