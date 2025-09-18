@@ -45,6 +45,7 @@ main {
     margin: auto;
     padding-bottom: 20px;
     line-height: 1.3;
+    padding-inline: 15px;
 }
 
 table, th, td {
