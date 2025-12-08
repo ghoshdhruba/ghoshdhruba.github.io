@@ -11,7 +11,7 @@ We motivate the algorithm using time instead of distance.
 Imagine a virus starting at \( s \) at time \( 0 \), which spreads along any edge at the rate of \( 1 \) unit per second. 
 When the virus infects a node \( u \), it tries to calculate the earliest time at which each neighbor \( v \) of \( u \) will be infected, by adding the weight of edge \( (u, v) \) to the time when \( u \) was infected. 
 It will only update \(v\)'s time if it sees that its estimate is lower than the previous estimate (if any) for \( v \). 
-This corresponds to our intuition for how time values should be assigned to nodes.
+This corresponds to our intuition for how early a node should be infected.
 </p>
 
 <p>
