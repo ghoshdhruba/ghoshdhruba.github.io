@@ -9,9 +9,20 @@
     </head>
     <body>
         <main>
+            <!--<img src="assets/images/topOfPage/rotheneuf_rocks_cropped.jpg" width="100%" style="margin-top:20px">-->
+            <img id="random-banner" src="" width="100%" style="margin-top:20px; padding-bottom:0px">
+            <script>
+                const random = Math.floor(Math.random()*5) + 1;
+
+                document.getElementById('random-banner').src = 
+                    `{{ '/assets/images/topOfPage/cropped' | relative_url }}${random}.jpg`;
+            </script>
             <h1 style="text-align:center"> Dhrubajyoti Ghosh </h1>
             {% include navigation.html %}
-            <h2 style="text-align: left;"> {{ page.header }} </h2>
+            <h2 style="text-align: left; margin-bottom: 0px;"> {{ page.header }} </h2>
+            {% if page.date %}
+            <p style="margin-top:0px; margin-bottom: 20px;"><small>Posted on {{ page.date }}</small></p>
+            {% endif %}
             {{ content }}
         </main>
     </body>

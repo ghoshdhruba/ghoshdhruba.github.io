@@ -11,6 +11,13 @@
     </head>
     <body>
         <main>
+            <img id="random-banner" src="" width="100%" style="margin-top:20px; padding-bottom:0px">
+            <script>
+                const random = Math.floor(Math.random()*5) + 1;
+
+                document.getElementById('random-banner').src = 
+                    `{{ '/assets/images/topOfPage/cropped' | relative_url }}${random}.jpg`;
+            </script>
             <h1 style="text-align:center"> Dhrubajyoti Ghosh </h1>
             {% include navigation.html %}
             <h2 style="text-align: left;"> {{ page.header }} </h2>
